@@ -14,7 +14,7 @@ export const TIME_SLOTS = [
   { id: 'evening', title: 'Evening', hint: '04:00 PM – 08:00 PM' },
 ];
 
-// 3. Main Services Config
+// 3. Main Services Config (Updated with Local Public Paths)
 export const services = [
   {
     id: "haircut",
@@ -22,8 +22,8 @@ export const services = [
     duration: 45,
     priceHint: "Starts ₹499",
     category: "hair",
-    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=1000&auto=format&fit=crop",
-    needsSkinType: false, // Isme skin ki zaroorat nahi
+    image: "/Haircut.png", // Public folder reference
+    needsSkinType: false,
     active: true,
   },
   {
@@ -32,8 +32,8 @@ export const services = [
     duration: 60,
     priceHint: "Starts ₹999",
     category: "skin",
-    image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop",
-    needsSkinType: true, // Isme skin selection dikhega
+    image: "/facial.png", // Public folder reference
+    needsSkinType: true,
     active: true,
   },
   {
@@ -42,7 +42,7 @@ export const services = [
     duration: 40,
     priceHint: "Starts ₹699",
     category: "skin",
-    image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=1000&auto=format&fit=crop",
+    image: "/Poreclean.png", // Public folder reference
     needsSkinType: true,
     active: true,
   },
@@ -52,7 +52,7 @@ export const services = [
     duration: 30,
     priceHint: "Starts ₹399",
     category: "body",
-    image: "https://images.unsplash.com/photo-1544161515-4ae6ce6e8584?q=80&w=1000&auto=format&fit=crop",
+    image: "/Waxing.png", // Public folder reference
     needsSkinType: false,
     active: true,
   },
@@ -62,8 +62,8 @@ export const services = [
     duration: 180,
     priceHint: "Starts ₹15,000",
     category: "bridal",
-    image: "https://images.unsplash.com/photo-1595152434305-16729f39a05b?q=80&w=1000&auto=format&fit=crop",
-    needsSkinType: true, // Makeup products skin ke hisaab se hote hain
+    image: "/Bridalmakeup.png", // Public folder reference
+    needsSkinType: true,
     active: true,
   },
   {
@@ -72,7 +72,7 @@ export const services = [
     duration: 50,
     priceHint: "Starts ₹799",
     category: "body",
-    image: "https://images.unsplash.com/photo-1519415510236-855906a1b558?q=80&w=1000&auto=format&fit=crop",
+    image: "/pedicure.png", // Public folder reference
     needsSkinType: false,
     active: true,
   },
