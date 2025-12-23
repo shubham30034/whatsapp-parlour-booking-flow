@@ -26,7 +26,7 @@ const TimePage = () => {
 
   useEffect(() => {
     if (!bookingData.service) {
-      router.replace('/services'); // Make sure this matches your folder name
+      router.replace('/service'); // Make sure this matches your folder name
     }
     setMounted(true);
   }, [bookingData.service, router]);
