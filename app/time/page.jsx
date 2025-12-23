@@ -25,7 +25,6 @@ const TimePage = () => {
   const slot = bookingData.slot;
 
   useEffect(() => {
-    // Service check guard
     if (!bookingData.service) {
       router.replace('/service');
     }
@@ -34,22 +33,56 @@ const TimePage = () => {
 
   const canContinue = day && slot;
 
+  // Steps configuration for Progress Indicator
+  const steps = [
+    { name: 'Service', path: '/service' },
+    { name: 'Time', path: '/time' },
+    { name: 'Review', path: '/review' }
+  ];
+
   if (!bookingData.service) return null;
 
   return (
     <main className="h-screen bg-[#FDFCFB] text-[#1A1A1A] antialiased flex flex-col overflow-hidden relative">
       <NavBar />
 
-      {/* CONTENT AREA: 
-        Mobile par overflow-y-auto hai taki choti screen par slots scroll ho sakein.
-        PC par overflow-hidden hai (Zero Scroll).
-      */}
+      {/* --- PROGRESS INDICATOR (Newly Added) --- */}
+      <div className={`w-full max-w-6xl mx-auto px-6 mt-24 md:mt-32 transition-all duration-1000 delay-100 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="max-w-xs flex items-center justify-between relative">
+          <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#E0E0E0] -translate-y-1/2 z-0" />
+          
+          {steps.map((step, index) => {
+            const isActive = index === 1; // Time is Step 02
+            const isCompleted = index < 1; // Service is done
+
+            return (
+              <div key={step.name} className="relative z-10 flex flex-col items-center">
+                <div 
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-500 border-2 ${
+                    isActive 
+                      ? 'bg-[#8B7E74] border-[#8B7E74] scale-125' 
+                      : isCompleted
+                        ? 'bg-[#1A1A1A] border-[#1A1A1A]'
+                        : 'bg-white border-[#E0E0E0]'
+                  }`} 
+                />
+                <span className={`text-[8px] font-black uppercase tracking-tighter mt-2 ${
+                  isActive ? 'text-[#1A1A1A]' : 'text-[#BDBDBD]'
+                }`}>
+                  {step.name}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div
         className={`flex-1 overflow-y-auto md:overflow-hidden transition-all duration-1000 transform ${
           mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 pt-24 pb-32 md:py-0 md:h-full flex flex-col justify-center">
+        <div className="max-w-6xl mx-auto px-6 pt-10 pb-32 md:py-0 md:h-full flex flex-col justify-center">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-20 items-start md:items-center">
 
             {/* LEFT COLUMN: HEADER & DATES */}
@@ -131,11 +164,7 @@ const TimePage = () => {
         </div>
       </div>
 
-      {/* FLOATING FOOTER: 
-        'fixed bottom-0' se hamesha visible rahega.
-        'pb-8' se bottom se gap rahega (Floating effect).
-        'pointer-events-none' + 'pointer-events-auto' se piche ka content clickable rahega.
-      */}
+      {/* FLOATING FOOTER */}
       <footer className={`fixed bottom-0 left-0 w-full px-6 pb-8 md:pb-12 z-50 pointer-events-none transition-all duration-700 transform 
           ${canContinue ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
       >
@@ -144,7 +173,6 @@ const TimePage = () => {
             onClick={() => router.push('/review')}
             className="w-full bg-[#1A1A1A] text-white h-[64px] md:h-[74px] flex items-center justify-center gap-4 group relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] active:scale-[0.98] overflow-hidden transition-all duration-300 rounded-2xl md:rounded-none"
           >
-            {/* Hover Slide Effect */}
             <div className="absolute inset-0 bg-[#8B7E74] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
             
             <span className="text-[12px] font-black uppercase tracking-[0.4em] z-10 relative">

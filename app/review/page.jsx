@@ -31,11 +31,50 @@ const ReviewPage = () => {
     }
   }, [service, date, slot, skinType, router]);
 
+  // Steps configuration for Progress Indicator
+  const steps = [
+    { name: 'Service', path: '/service' },
+    { name: 'Time', path: '/time' },
+    { name: 'Review', path: '/review' }
+  ];
+
   if (!service || !mounted) return null;
 
   return (
     <main className="h-screen bg-[#FDFCFB] text-[#1A1A1A] antialiased overflow-hidden flex flex-col">
       <NavBar />
+
+      {/* --- PROGRESS INDICATOR (Newly Added) --- */}
+      <div className={`w-full max-w-xl mx-auto px-6 mt-24 transition-all duration-1000 delay-100 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="flex items-center justify-between relative">
+          {/* Background Line */}
+          <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#E0E0E0] -translate-y-1/2 z-0" />
+          
+          {steps.map((step, index) => {
+            const isActive = index === 2; // Review is Step 03
+            const isCompleted = index < 2; // Service and Time are done
+
+            return (
+              <div key={step.name} className="relative z-10 flex flex-col items-center">
+                <div 
+                  className={`w-2.5 h-2.5 rounded-full transition-all duration-500 border-2 ${
+                    isActive 
+                      ? 'bg-[#8B7E74] border-[#8B7E74] scale-125' 
+                      : isCompleted
+                        ? 'bg-[#1A1A1A] border-[#1A1A1A]'
+                        : 'bg-white border-[#E0E0E0]'
+                  }`} 
+                />
+                <span className={`text-[8px] font-black uppercase tracking-tighter mt-2 ${
+                  isActive ? 'text-[#1A1A1A]' : 'text-[#BDBDBD]'
+                }`}>
+                  {step.name}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
 
       <div className={`flex-1 flex flex-col justify-center max-w-xl mx-auto px-6 w-full transition-all duration-700 ${mounted ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]'}`}>
         
@@ -74,7 +113,7 @@ const ReviewPage = () => {
             <div className="grid grid-cols-2 gap-4 border-b border-dashed border-[#F1F1F1] pb-5">
               <div>
                 <label className="text-[9px] font-black uppercase tracking-widest text-[#BDBDBD] block mb-1">
-                  Date
+                  Day
                 </label>
                 <p className="text-[15px] md:text-[17px] font-bold capitalize">
                   {date}
@@ -82,7 +121,7 @@ const ReviewPage = () => {
               </div>
               <div>
                 <label className="text-[9px] font-black uppercase tracking-widest text-[#BDBDBD] block mb-1">
-                  Window
+                  Selected Window
                 </label>
                 <p className="text-[15px] md:text-[17px] font-bold capitalize">
                   {slot}
@@ -111,7 +150,7 @@ const ReviewPage = () => {
         <div className="mt-6 flex flex-col gap-3">
           <button
             onClick={() => {
-              const message = `Hi Artistry! I'd like to book:%0A- Service: ${service.name}%0A- Date: ${date}%0A- Window: ${slot}${skinType ? `%0A- Skin: ${skinType}` : ''}`;
+              const message = `Hi,%0AI want to book a service.%0A%0A• Service: ${service.name}%0A• Day: ${date}%0A• Preferred time: Flexible (Requested ${slot})%0A%0APlease confirm available time.`;
               window.open(`https://wa.me/918279898128?text=${message}`, '_blank');
             }}
             className="w-full bg-[#1A1A1A] text-white py-5 flex items-center justify-center gap-4 group hover:bg-[#8B7E74] transition-all duration-500 shadow-lg active:scale-[0.98]"
