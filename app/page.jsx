@@ -79,7 +79,7 @@ export default function HomePage() {
                 onClick={() => router.push('/service')}
                 className="group relative w-full md:w-auto h-[58px] md:h-[74px] px-10 rounded-2xl bg-[#1A1A1A] text-white text-[16px] font-semibold shadow-xl active:scale-[0.95] transition-all flex items-center justify-center gap-4 overflow-hidden"
               >
-                <span className="relative z-10">Book on WhatsApp</span>
+                <span className="relative z-10">Check Available Services</span>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="relative z-10 transition-transform group-hover:translate-x-1">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
                   <polyline points="12 5 19 12 12 19"></polyline>
