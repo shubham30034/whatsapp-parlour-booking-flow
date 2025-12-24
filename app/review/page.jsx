@@ -14,157 +14,105 @@ const ReviewPage = () => {
 
   useEffect(() => {
     setMounted(true);
-
-    if (!service) {
-      router.replace('/service');
-      return;
-    }
-
-    if (!date || !slot) {
-      router.replace('/time');
-      return;
-    }
-
-    if (service.needsSkinType && !skinType) {
-      router.replace('/service');
-      return;
-    }
-  }, [service, date, slot, skinType, router]);
-
-  // Steps configuration for Progress Indicator
-  const steps = [
-    { name: 'Service', path: '/service' },
-    { name: 'Time', path: '/time' },
-    { name: 'Review', path: '/review' }
-  ];
+    if (!service) { router.replace('/service'); return; }
+    if (!date || !slot) { router.replace('/time'); return; }
+  }, [service, date, slot, router]);
 
   if (!service || !mounted) return null;
 
+  const handleConfirm = () => {
+    const message = `Hi Artistry Team! ✨%0AI'm almost done with my booking!%0A%0A🌿 Experience: ${service.name}%0A🗓 Date: ${date}%0A⏰ Window: ${slot}${skinType ? `%0A👤 Skin Profile: ${skinType}` : ''}%0A%0APlease confirm the exact time for me!`;
+    window.open(`https://wa.me/918279898128?text=${message}`, '_blank');
+  };
+
   return (
-    <main className="h-screen bg-[#FDFCFB] text-[#1A1A1A] antialiased overflow-hidden flex flex-col">
+    <main className="h-screen bg-[#FDFCFB] text-[#1A1A1A] antialiased flex flex-col overflow-hidden">
       <NavBar />
 
-      {/* --- PROGRESS INDICATOR (Newly Added) --- */}
-      <div className={`w-full max-w-xl mx-auto px-6 mt-24 transition-all duration-1000 delay-100 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="flex items-center justify-between relative">
-          {/* Background Line */}
-          <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#E0E0E0] -translate-y-1/2 z-0" />
-          
-          {steps.map((step, index) => {
-            const isActive = index === 2; // Review is Step 03
-            const isCompleted = index < 2; // Service and Time are done
-
-            return (
-              <div key={step.name} className="relative z-10 flex flex-col items-center">
-                <div 
-                  className={`w-2.5 h-2.5 rounded-full transition-all duration-500 border-2 ${
-                    isActive 
-                      ? 'bg-[#8B7E74] border-[#8B7E74] scale-125' 
-                      : isCompleted
-                        ? 'bg-[#1A1A1A] border-[#1A1A1A]'
-                        : 'bg-white border-[#E0E0E0]'
-                  }`} 
-                />
-                <span className={`text-[8px] font-black uppercase tracking-tighter mt-2 ${
-                  isActive ? 'text-[#1A1A1A]' : 'text-[#BDBDBD]'
-                }`}>
-                  {step.name}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className={`flex-1 flex flex-col justify-center max-w-xl mx-auto px-6 w-full transition-all duration-700 ${mounted ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]'}`}>
+      <div className={`flex-1 flex flex-col max-w-xl mx-auto px-6 w-full pt-24 pb-6 transition-all duration-1000 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
         
-        {/* HEADER */}
-        <header className="mb-6">
-          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8B7E74] mb-1">
-            Step 03 / Final
-          </p>
-          <h1 className="text-[32px] md:text-[42px] font-bold tracking-tighter leading-none">
-            Review <span className="italic font-serif font-light text-[#8B7E74]">Order</span>
+        {/* EMOTIONAL HEADER */}
+        <header className="mb-6 text-center md:text-left px-2">
+          <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+            <span className="w-8 h-[1px] bg-[#8B7E74]" />
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-[#8B7E74]">Step 03 / 03</p>
+          </div>
+          <h1 className="text-[36px] md:text-[52px] font-bold tracking-tighter leading-[0.9] mb-3">
+            Almost <span className="italic font-serif font-light text-[#8B7E74]">Done.</span>
           </h1>
+          <p className="text-gray-500 text-xs font-medium">
+            Everything looks perfect. Secure your artistry session below.
+          </p>
         </header>
 
-        {/* RECEIPT */}
-        <div className="bg-white border border-[#F1F1F1] p-6 md:p-8 shadow-sm relative">
-          <div className="absolute top-0 left-0 w-full h-[3px] bg-[#8B7E74]" />
+        {/* LUXURY RECEIPT CARD */}
+        <div className="bg-white border border-[#F1F1F1] rounded-[28px] p-6 md:p-10 shadow-[0_20px_40px_rgba(0,0,0,0.02)] relative overflow-hidden mb-6">
+          
+          <div className="absolute top-5 right-6 flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-[8px] font-black uppercase tracking-widest text-gray-400">Reserved</span>
+          </div>
 
           <div className="space-y-6">
-            <div className="border-b border-dashed border-[#F1F1F1] pb-5">
-              <label className="text-[9px] font-black uppercase tracking-widest text-[#BDBDBD] block mb-2">
-                Service
-              </label>
-              <div className="flex justify-between items-start gap-4">
-                <h3 className="text-[18px] md:text-[22px] font-bold tracking-tight">
-                  {service.name}
-                </h3>
-                <p className="font-bold text-[16px] tracking-tighter">
-                  {service.priceHint}
-                </p>
-              </div>
-              <p className="text-[10px] text-[#A1A1A1] mt-1 font-bold uppercase">
-                {service.duration} MINS • {service.category}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 border-b border-dashed border-[#F1F1F1] pb-5">
-              <div>
-                <label className="text-[9px] font-black uppercase tracking-widest text-[#BDBDBD] block mb-1">
-                  Day
-                </label>
-                <p className="text-[15px] md:text-[17px] font-bold capitalize">
-                  {date}
-                </p>
-              </div>
-              <div>
-                <label className="text-[9px] font-black uppercase tracking-widest text-[#BDBDBD] block mb-1">
-                  Selected Window
-                </label>
-                <p className="text-[15px] md:text-[17px] font-bold capitalize">
-                  {slot}
-                </p>
+            <div>
+              <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#8B7E74] block mb-2">Experience</label>
+              <div className="flex justify-between items-end">
+                <h3 className="text-xl font-bold tracking-tighter">{service.name}</h3>
+                <p className="text-lg font-serif italic text-[#8B7E74]">{service.priceHint}</p>
               </div>
             </div>
 
-            {skinType && (
-              <div className="border-b border-dashed border-[#F1F1F1] pb-5">
-                <label className="text-[9px] font-black uppercase tracking-widest text-[#BDBDBD] block mb-1">
-                  Skin Profile
-                </label>
-                <p className="text-[15px] md:text-[17px] font-bold capitalize">
-                  {skinType} Type
-                </p>
+            <div className="grid grid-cols-2 gap-6 py-4 border-y border-dashed border-[#F1F1F1]">
+              <div>
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#BDBDBD] block mb-1">Date</label>
+                <p className="text-md font-bold capitalize">{date}</p>
               </div>
-            )}
+              <div>
+                <label className="text-[9px] font-black uppercase tracking-[0.2em] text-[#BDBDBD] block mb-1">Window</label>
+                <p className="text-md font-bold capitalize">{slot}</p>
+              </div>
+            </div>
 
-            <p className="text-[10px] text-[#707070] italic">
-              *Confirming will redirect you to WhatsApp for final timing.
+            {/* Clarity Box - English Version */}
+            <div className="bg-[#8B7E74]/5 p-4 rounded-2xl border border-[#8B7E74]/10">
+              <div className="flex items-start gap-3">
+                <div className="mt-1 flex-shrink-0 w-4 h-4 rounded-full bg-[#8B7E74] flex items-center justify-center">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] text-[#8B7E74] font-bold uppercase tracking-tight">Final Step on WhatsApp</p>
+                  <p className="text-[10px] text-[#8B7E74]/80 leading-relaxed mt-0.5 font-medium">
+                    Our team will coordinate with you via WhatsApp to confirm the <span className="font-bold underline">exact appointment time</span> based on availability.
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <p className="text-[10px] text-gray-400 font-medium italic px-1">
+              * No advance payment. Pay after your service.
             </p>
           </div>
         </div>
 
-        {/* ACTIONS */}
-        <div className="mt-6 flex flex-col gap-3">
+        {/* ACTION BUTTONS - Pushed to bottom */}
+        <div className="mt-auto space-y-3 pb-4">
           <button
-            onClick={() => {
-              const message = `Hi,%0AI want to book a service.%0A%0A• Service: ${service.name}%0A• Day: ${date}%0A• Preferred time: Flexible (Requested ${slot})%0A%0APlease confirm available time.`;
-              window.open(`https://wa.me/918279898128?text=${message}`, '_blank');
-            }}
-            className="w-full bg-[#1A1A1A] text-white py-5 flex items-center justify-center gap-4 group hover:bg-[#8B7E74] transition-all duration-500 shadow-lg active:scale-[0.98]"
+            onClick={handleConfirm}
+            className="w-full bg-[#1A1A1A] text-white h-14 rounded-2xl flex items-center justify-center gap-4 group transition-all duration-500 hover:bg-[#8B7E74] shadow-lg active:scale-[0.98]"
           >
-            <span className="text-[11px] font-black uppercase tracking-[0.4em]">
-              Confirm & WhatsApp
-            </span>
+            <span className="text-[11px] font-black uppercase tracking-[0.4em]">Send Booking on WhatsApp</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </button>
 
           <button
             onClick={() => router.back()}
-            className="text-[10px] font-black uppercase tracking-[0.2em] text-[#BDBDBD] hover:text-[#1A1A1A] transition-colors py-2"
+            className="w-full text-[10px] font-black uppercase tracking-[0.2em] text-[#BDBDBD] hover:text-[#1A1A1A] transition-colors py-2 text-center"
           >
-            ← Back to Edit
+            ← Back to Edit Details
           </button>
         </div>
       </div>

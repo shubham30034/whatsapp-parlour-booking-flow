@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { services } from '@/app/config/services';
 import NavBar from '../components/NavBar';
 import { useBooking } from '../context/BookingContext';
+import { SKIN_TYPES } from '../config/services';
 
 export default function ServicePage() {
   const router = useRouter();
@@ -27,7 +28,6 @@ export default function ServicePage() {
 
   const activeServices = services.filter((s) => s.active);
 
-  // YOUR SHARED INDICATOR CONFIGURATION
   const steps = [
     { name: 'Service', path: '/service' },
     { name: 'Time', path: '/time' },
@@ -36,19 +36,20 @@ export default function ServicePage() {
 
   return (
     <main className="min-h-screen bg-[#FDFCFB] text-[#1A1A1A] antialiased flex flex-col">
+      {/* NAVIGATION */}
       <div className={`fixed top-0 left-0 w-full z-50 transition-transform duration-500 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <NavBar />
       </div>
 
-      {/* --- YOUR SAME-TO-SAME INDICATOR --- */}
+      {/* STEP INDICATOR */}
       <div className={`sticky z-40 w-full bg-[#FDFCFB]/90 backdrop-blur-md border-b border-[#F1F1F1]/50 py-4 transition-all duration-500 ${isVisible ? 'top-[64px]' : 'top-0 shadow-sm'}`}>
         <div className="max-w-6xl mx-auto px-6">
           <div className="max-w-xs flex items-center justify-between relative">
             <div className="absolute top-1/2 left-0 w-full h-[1px] bg-[#E0E0E0] -translate-y-[10px] z-0" />
             
             {steps.map((step, index) => {
-              const isActive = index === 0; // Service is Step 01
-              const isCompleted = index < 0; // Nothing before service
+              const isActive = index === 0;
+              const isCompleted = index < 0;
 
               return (
                 <div key={step.name} className="relative z-10 flex flex-col items-center">
@@ -83,7 +84,7 @@ export default function ServicePage() {
         </header>
 
         {/* SERVICE GRID */}
-        <section className="max-w-6xl mx-auto px-5 pb-40">
+        <section className="max-w-6xl mx-auto px-5 pb-48">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
             {activeServices.map((service) => {
               const isSelected = bookingData.service?.id === service.id;
@@ -92,7 +93,6 @@ export default function ServicePage() {
                   <div className={`relative aspect-[16/10] overflow-hidden rounded-[24px] transition-all duration-700 ${isSelected ? 'ring-2 ring-[#1A1A1A] ring-offset-4' : ''}`}>
                     <img src={service.image} alt={service.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" />
                     
-                    {/* PRICE BADGE */}
                     <div className="absolute top-5 right-5 backdrop-blur-xl bg-white/95 px-4 py-2 rounded-full shadow-md border border-white/20">
                       <span className="text-[14px] font-bold tracking-tight text-[#1A1A1A]">{service.priceHint}</span>
                     </div>
@@ -123,44 +123,121 @@ export default function ServicePage() {
         </section>
       </div>
 
-      {/* FLOATING FOOTER */}
+      {/* FLOATING FOOTER WITH INTERNAL TEXT */}
       <footer className={`fixed bottom-0 left-0 w-full px-6 pb-8 md:pb-12 z-50 pointer-events-none transition-all duration-700 transform 
           ${bookingData.service ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
       >
         <div className="max-w-2xl mx-auto pointer-events-auto">
           <button
-            onClick={() => (bookingData.service.needsSkinType && !bookingData.skinType) ? setIsModalOpen(true) : router.push('/time')}
-            className="w-full bg-[#1A1A1A] text-white h-[64px] md:h-[74px] flex items-center justify-center gap-4 group relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] active:scale-[0.98] overflow-hidden transition-all duration-300 rounded-2xl md:rounded-none"
+            onClick={() => (bookingData.service?.needsSkinType && !bookingData.skinType) ? setIsModalOpen(true) : router.push('/time')}
+            className="w-full bg-[#1A1A1A] text-white py-5 px-6 flex flex-col items-center justify-center gap-1 group relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] active:scale-[0.98] overflow-hidden transition-all duration-300 rounded-[24px] md:rounded-[32px]"
           >
+            {/* Hover Background Layer */}
             <div className="absolute inset-0 bg-[#8B7E74] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-            <span className="text-[12px] font-black uppercase tracking-[0.4em] z-10 relative">Continue to Timing</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="z-10 relative transition-transform group-hover:translate-x-1">
-              <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
+            
+            {/* Primary Action Row */}
+            <div className="flex items-center gap-3 z-10 relative">
+              <span className="text-[12px] font-black uppercase tracking-[0.4em]">Choose Time Window</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="transition-transform group-hover:translate-x-1">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </div>
+
+            {/* Internal Subtext */}
+            <p className="text-[9px] font-medium text-white/40 group-hover:text-white/70 z-10 relative uppercase tracking-widest transition-colors">
+              You can change service later on WhatsApp
+            </p>
           </button>
         </div>
       </footer>
 
-      <SkinModal isOpen={isModalOpen} onConfirm={(skin) => { setSkinType(skin); setIsModalOpen(false); router.push('/time'); }} />
+      {/* SKIN ANALYSIS MODAL */}
+      <SkinModal 
+        isOpen={isModalOpen} 
+        onConfirm={(skin) => { 
+          setSkinType(skin); 
+          setIsModalOpen(false); 
+          router.push('/time'); 
+        }} 
+      />
     </main>
   );
 }
 
-// Modal component same as before...
 function SkinModal({ isOpen, onConfirm }) {
   const [selected, setSelected] = useState(null);
+  
   if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-[100] flex items-end md:items-center justify-center p-6">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
-      <div className="relative bg-white w-full max-w-sm p-8 rounded-[32px] shadow-2xl animate-in slide-in-from-bottom duration-500">
-        <h2 className="text-[24px] font-bold tracking-tight mb-6">Skin Profile</h2>
-        <div className="grid grid-cols-2 gap-3 mb-8">
-          {['Normal', 'Dry', 'Oily', 'Sensitive'].map(s => (
-            <button key={s} onClick={() => setSelected(s)} className={`py-4 rounded-xl text-[11px] font-bold uppercase tracking-widest border transition-all ${selected === s ? 'bg-[#1A1A1A] border-[#1A1A1A] text-white' : 'bg-white border-[#F1F1F1] text-gray-400'}`}>{s}</button>
-          ))}
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-md transition-opacity duration-500" />
+      
+      <div className="relative bg-[#FDFCFB] w-full max-w-lg overflow-hidden rounded-[32px] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.35)] animate-in fade-in zoom-in-95 duration-300">
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-[#8B7E74]/10">
+           <div className="h-full bg-[#8B7E74] transition-all duration-700 ease-out" style={{ width: selected ? '100%' : '15%' }} />
         </div>
-        <button disabled={!selected} onClick={() => onConfirm(selected.toLowerCase())} className={`w-full py-4 rounded-full font-bold text-[12px] uppercase tracking-widest transition-all ${selected ? 'bg-[#8B7E74] text-white' : 'bg-gray-100 text-gray-400'}`}>Confirm</button>
+
+        <div className="p-8 md:p-10">
+          <header className="mb-8">
+            <div className="flex items-center gap-3 mb-2">
+               <div className="h-[1px] w-8 bg-[#8B7E74]" />
+               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#8B7E74]">Profile</span>
+            </div>
+            <h2 className="text-[28px] md:text-[36px] font-bold tracking-tighter leading-tight">
+              Skin <span className="italic font-serif font-light text-[#8B7E74]">Analysis.</span>
+            </h2>
+          </header>
+
+          <div className="grid grid-cols-2 gap-3 mb-10">
+            {SKIN_TYPES.map((type) => {
+              const isPicked = selected === type.id;
+              return (
+                <button 
+                  key={type.id} 
+                  onClick={() => setSelected(type.id)}
+                  className={`relative flex flex-col items-start p-5 rounded-2xl border transition-all duration-500 text-left ${
+                    isPicked 
+                    ? 'border-[#1A1A1A] bg-[#1A1A1A] text-white shadow-xl translate-y-[-2px]' 
+                    : 'border-[#F1F1F1] bg-white hover:border-[#8B7E74]/50'
+                  }`}
+                >
+                  <span className={`text-[11px] font-black uppercase tracking-widest mb-1 ${isPicked ? 'text-white' : 'text-[#1A1A1A]'}`}>
+                    {type.label}
+                  </span>
+                  <span className={`text-[9px] leading-tight font-medium ${isPicked ? 'text-gray-400' : 'text-gray-500'}`}>
+                    {type.desc}
+                  </span>
+                  {isPicked && (
+                    <div className="absolute top-3 right-3 animate-in zoom-in duration-300">
+                      <div className="w-2 h-2 rounded-full bg-[#8B7E74]" />
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <button 
+              disabled={!selected} 
+              onClick={() => onConfirm(selected)}
+              className={`w-full h-14 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] transition-all duration-500 flex items-center justify-center gap-3 ${
+                selected 
+                ? 'bg-[#1A1A1A] text-white shadow-lg hover:bg-[#8B7E74]' 
+                : 'bg-gray-100 text-gray-300 cursor-not-allowed'
+              }`}
+            >
+              Confirm Selection
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <p className="text-center text-[9px] uppercase tracking-widest text-gray-400 font-bold">
+              Step 01: Personalization
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

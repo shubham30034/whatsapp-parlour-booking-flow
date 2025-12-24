@@ -1,11 +1,11 @@
 // 1. Skin Types Config
-export const SKIN_TYPES = [
-  { id: 'normal', label: 'Normal' },
-  { id: 'dry', label: 'Dry' },
-  { id: 'oily', label: 'Oily' },
-  { id: 'combination', label: 'Comb.' },
-  { id: 'sensitive', label: 'Sens.' },
-];
+   export const SKIN_TYPES = [
+    { id: 'normal', label: 'Normal', desc: 'Balanced & Clear' },
+    { id: 'dry', label: 'Dry', desc: 'Needs Hydration' },
+    { id: 'oily', label: 'Oily', desc: 'Shiny & Active' },
+    { id: 'sensitive', label: 'Sensitive', desc: 'Fragile & Delicate' },
+    {id:'i dont know', label:'Not Sure', desc:'Help Me Decide'}
+  ];
 
 // 2. Time Slots Config
 export const TIME_SLOTS = [
