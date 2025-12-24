@@ -37,7 +37,6 @@ export default function ServicePage() {
 
   return (
     <main className="min-h-screen bg-[#FDFCFB] text-[#1A1A1A] antialiased flex flex-col">
-      {/* NAVIGATION */}
       <div className={`fixed top-0 left-0 w-full z-50 transition-transform duration-500 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <NavBar />
       </div>
@@ -61,89 +60,112 @@ export default function ServicePage() {
       </div>
 
       <div className={`flex-1 transition-all duration-1000 transform ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-        {/* HEADER */}
-        <header className="max-w-6xl mx-auto px-6 pt-16 pb-12">
+        {/* HEADER - UPDATED TEXT */}
+        <header className="max-w-6xl mx-auto px-6 pt-16 pb-10">
           <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8B7E74] mb-2">Step 01 / 03</p>
-          <h1 className="text-[36px] md:text-[56px] lg:text-[72px] font-bold tracking-tighter leading-none">
-            Choose <span className="italic font-serif font-light text-[#8B7E74]">Artistry.</span>
+          <h1 className="text-[34px] md:text-[56px] font-bold tracking-tighter leading-[1.1] mb-3">
+            Select Your <span className="italic font-serif font-light text-[#8B7E74]">Beauty Offer.</span>
           </h1>
+          <p className="text-[10px] md:text-xs font-medium text-gray-400 max-w-md leading-relaxed">
+            *Final pricing may vary slightly based on your custom skin profile and total service duration.
+          </p>
         </header>
 
-        {/* SERVICE GRID SECTION */}
         <section className="max-w-6xl mx-auto px-5 pb-48">
+          {/* COMPACT OFFER CARD */}
           {activeOffer && (
             <div 
               onClick={() => setOffer(activeOffer)}
-              className={`mb-16 relative overflow-hidden rounded-[28px] transition-all duration-500 cursor-pointer active:scale-[0.98]
-              ${bookingData.offer?.id === activeOffer.id ? 'bg-[#8B7E74] shadow-2xl translate-y-[-4px]' : 'bg-[#1A1A1A] shadow-lg'}`}
+              className={`mb-12 relative overflow-hidden rounded-[24px] transition-all duration-500 cursor-pointer active:scale-[0.98]
+              ${bookingData.offer?.id === activeOffer.id ? 'bg-[#8B7E74] shadow-xl' : 'bg-[#1A1A1A] shadow-lg'}`}
             >
-              <div className="p-7 md:p-10 relative overflow-hidden">
-                {bookingData.offer?.id === activeOffer.id && (
-                  <div className="absolute top-5 right-5 w-7 h-7 bg-white rounded-full flex items-center justify-center animate-in zoom-in duration-300 shadow-xl z-20">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B7E74" strokeWidth="4">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                  </div>
-                )}
-                <div className="relative z-10">
-                  <div className={`inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border text-[8px] font-black uppercase tracking-widest mb-4 transition-all
-                    ${bookingData.offer?.id === activeOffer.id ? 'bg-white/20 border-white/30 text-white' : 'bg-[#8B7E74]/10 border-[#8B7E74]/30 text-[#8B7E74]'}`}>
-                    <span className={`w-1 h-1 rounded-full ${bookingData.offer?.id === activeOffer.id ? 'bg-white' : 'bg-[#8B7E74] animate-pulse'}`} />
-                    {activeOffer.tag}
-                  </div>
-                  <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter mb-2 leading-none">
-                    {activeOffer.title}
-                  </h2>
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 mb-6">
-                    {activeOffer.servicesIncluded.map((s, i) => (
-                      <span key={i} className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 ${bookingData.offer?.id === activeOffer.id ? 'text-white/80' : 'text-white/40'}`}>
-                        {s} {i !== activeOffer.servicesIncluded.length - 1 && <span className="opacity-30">•</span>}
+              <div className="p-6 md:p-8 relative">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="bg-white/10 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-white/10">
+                        {activeOffer.tag}
                       </span>
-                    ))}
+                      <span className="text-[#FDFCFB]/60 text-[8px] font-bold uppercase tracking-widest italic">Best Value</span>
+                    </div>
+                    
+                    <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tighter mb-4 leading-none">
+                      {activeOffer.title}
+                    </h2>
+
+                    {/* Value Points */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="flex items-center gap-2 text-white/90">
+                        <div className="w-1 h-1 rounded-full bg-white/40" />
+                        <span className="text-[10px] font-bold uppercase tracking-tight leading-none">Full Cleanup Incl.</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-white/90">
+                        <div className="w-1 h-1 rounded-full bg-white/40" />
+                        <span className="text-[10px] font-bold uppercase tracking-tight leading-none">Instant Glow Boost</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-white/90">
+                        <div className="w-1 h-1 rounded-full bg-white/40" />
+                        <span className="text-[10px] font-bold uppercase tracking-tight leading-none text-[#FDFCFB]">Save upto ₹300</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-baseline gap-2 pt-4 border-t border-white/10">
-                    <span className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none">{activeOffer.priceHint}</span>
-                    <span className={`text-[9px] font-medium uppercase tracking-[0.2em] italic ${bookingData.offer?.id === activeOffer.id ? 'text-white/60' : 'text-white/20'}`}>{activeOffer.note}</span>
+
+                  <div className="flex items-center md:flex-col md:items-end justify-between border-t border-white/5 md:border-t-0 pt-4 md:pt-0">
+                    <div className="text-left md:text-right">
+                      <p className="text-[8px] font-black text-white/40 uppercase tracking-widest mb-1">Starting at</p>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-3xl md:text-4xl font-bold text-white tracking-tighter leading-none">{activeOffer.priceHint}</span>
+                      </div>
+                    </div>
+                    
+                    <div className={`mt-2 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300
+                      ${bookingData.offer?.id === activeOffer.id ? 'bg-white scale-110 shadow-lg' : 'bg-white/10 opacity-50'}`}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={bookingData.offer?.id === activeOffer.id ? "#8B7E74" : "white"} strokeWidth="4">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
+          {/* SERVICE GRID */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
             {activeServices.map((service) => {
               const isSelected = bookingData.service?.id === service.id;
               const tagText = getSkinBasedTag(service, bookingData.skinType);
               return (
                 <div key={service.id} onClick={() => setService(service)} className="group cursor-pointer">
-                  <div className={`relative aspect-[16/10] overflow-hidden rounded-[24px] transition-all duration-700 ${isSelected ? 'ring-2 ring-[#1A1A1A] ring-offset-4' : ''}`}>
-                    <div className="absolute top-4 left-4 z-20">
-                      <span className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm backdrop-blur-md border border-white/20 transition-all duration-500
+                  <div className={`relative aspect-[16/9] overflow-hidden rounded-[20px] transition-all duration-700 ${isSelected ? 'ring-2 ring-[#1A1A1A] ring-offset-2' : ''}`}>
+                    <div className="absolute top-3 left-3 z-20">
+                      <span className={`px-2 py-1 rounded-full text-[8px] font-black uppercase tracking-widest shadow-sm backdrop-blur-md border border-white/20
                         ${service.isRecommended ? 'bg-[#8B7E74] text-white' : 'bg-white/90 text-[#1A1A1A]'}`}>
                         {tagText}
                       </span>
                     </div>
                     <img src={service.image} alt={service.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" />
-                    <div className="absolute top-4 right-4 backdrop-blur-xl bg-white/95 px-4 py-2 rounded-full shadow-md border border-white/20">
-                      <span className="text-[14px] font-bold tracking-tight text-[#1A1A1A]">{service.priceHint}</span>
+                    <div className="absolute top-3 right-3 backdrop-blur-md bg-white/90 px-3 py-1.5 rounded-full shadow-sm">
+                      <span className="text-[12px] font-bold tracking-tight text-[#1A1A1A]">{service.priceHint}</span>
                     </div>
                     {isSelected && (
-                      <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex items-center justify-center animate-in fade-in duration-500">
-                        <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center shadow-2xl">
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                      <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] flex items-center justify-center animate-in fade-in duration-300">
+                        <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center shadow-xl">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
                             <polyline points="20 6 9 17 4 12"/>
                           </svg>
                         </div>
                       </div>
                     )}
                   </div>
-                  <div className="mt-6 px-1 text-left">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-[9px] font-bold uppercase tracking-widest text-[#8B7E74]">{service.category}</span>
-                      <span className="text-gray-300">/</span>
-                      <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{service.duration} MIN</span>
+                  <div className="mt-4 px-1">
+                    <div className="flex items-center gap-2 mb-1.5 text-[8px] font-bold uppercase tracking-widest">
+                      <span className="text-[#8B7E74]">{service.category}</span>
+                      <span className="text-gray-300">•</span>
+                      <span className="text-gray-400">{service.duration} MIN</span>
                     </div>
-                    <h3 className="text-[26px] md:text-[32px] font-bold tracking-tight leading-tight transition-colors group-hover:text-[#8B7E74]">
+                    <h3 className="text-xl md:text-2xl font-bold tracking-tight leading-tight group-hover:text-[#8B7E74] transition-colors">
                       {service.name}
                     </h3>
                   </div>
@@ -154,24 +176,18 @@ export default function ServicePage() {
         </section>
       </div>
 
-      {/* FOOTER - WITH UPDATED HINT TEXT */}
-      <footer className={`fixed bottom-0 left-0 w-full px-6 pb-8 md:pb-12 z-50 pointer-events-none transition-all duration-700 transform 
+      {/* FOOTER */}
+      <footer className={`fixed bottom-0 left-0 w-full px-6 pb-6 z-50 pointer-events-none transition-all duration-700 transform 
         ${bookingData.service || bookingData.offer ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-        <div className="max-w-2xl mx-auto pointer-events-auto">
+        <div className="max-w-xl mx-auto pointer-events-auto">
           <button
             onClick={() => (bookingData.service?.needsSkinType && !bookingData.skinType) ? setIsModalOpen(true) : router.push('/time')}
-            className="w-full bg-[#1A1A1A] text-white py-5 px-6 flex flex-col items-center justify-center group relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] active:scale-[0.98] overflow-hidden transition-all duration-300 rounded-[24px] md:rounded-[32px]"
+            className="w-full bg-[#1A1A1A] text-white py-4 px-6 flex flex-col items-center justify-center group relative shadow-2xl active:scale-[0.98] overflow-hidden transition-all duration-300 rounded-[20px]"
           >
             <div className="absolute inset-0 bg-[#8B7E74] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
-            
             <div className="flex flex-col items-center z-10 relative">
-              <span className="text-[12px] font-black uppercase tracking-[0.4em] mb-0.5">
-                Choose Time Window
-              </span>
-              {/* ✨ ADDED HINT TEXT BELOW */}
-              <span className="text-[9px] font-medium text-white/60 tracking-wider">
-                You can adjust services later on WhatsApp
-              </span>
+              <span className="text-[11px] font-black uppercase tracking-[0.3em] mb-0.5">Continue to Timing</span>
+              <span className="text-[8px] font-medium text-white/50 tracking-wider italic">Adjustments can be made on WhatsApp</span>
             </div>
           </button>
         </div>
@@ -189,40 +205,35 @@ export default function ServicePage() {
   );
 }
 
-// SkinModal code remains exactly the same as provided
+// SkinModal code remains identical to previous refined version
 function SkinModal({ isOpen, onConfirm }) {
   const [selected, setSelected] = useState(null);
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-[#1A1A1A]/40 backdrop-blur-md transition-opacity duration-500" />
-      <div className="relative bg-[#FDFCFB] w-full max-w-lg overflow-hidden rounded-[32px] shadow-[0_40px_80px_-15px_rgba(0,0,0,0.35)] animate-in fade-in zoom-in-95 duration-300">
-        <div className="absolute top-0 left-0 w-full h-1.5 bg-[#8B7E74]/10">
-           <div className="h-full bg-[#8B7E74] transition-all duration-700 ease-out" style={{ width: selected ? '100%' : '15%' }} />
-        </div>
-        <div className="p-8 md:p-10">
-          <header className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-               <div className="h-[1px] w-8 bg-[#8B7E74]" />
-               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#8B7E74]">Profile</span>
-            </div>
-            <h2 className="text-[28px] md:text-[36px] font-bold tracking-tighter leading-tight">
-              Skin <span className="italic font-serif font-light text-[#8B7E74]">Analysis.</span>
-            </h2>
+      <div className="absolute inset-0 bg-[#1A1A1A]/60 backdrop-blur-sm transition-opacity duration-500" />
+      <div className="relative bg-[#FDFCFB] w-full max-w-sm overflow-hidden rounded-[28px] shadow-2xl animate-in fade-in zoom-in-95 duration-300">
+        <div className="p-8">
+          <header className="mb-6">
+            <p className="text-[9px] font-black uppercase tracking-[0.3em] text-[#8B7E74] mb-1">Skin Profile</p>
+            <h2 className="text-2xl font-bold tracking-tighter leading-tight">Identify <span className="italic font-serif font-light text-[#8B7E74]">Skin.</span></h2>
           </header>
 
-          <div className="grid grid-cols-2 gap-3 mb-10">
+          <div className="space-y-2.5 mb-8">
             {SKIN_TYPES.map((type) => {
               const isPicked = selected === type.id;
               return (
                 <button 
                   key={type.id} 
                   onClick={() => setSelected(type.id)}
-                  className={`relative flex flex-col items-start p-5 rounded-2xl border transition-all duration-500 text-left ${isPicked ? 'border-[#1A1A1A] bg-[#1A1A1A] text-white shadow-xl translate-y-[-2px]' : 'border-[#F1F1F1] bg-white hover:border-[#8B7E74]/50'}`}
+                  className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all duration-300 text-left ${isPicked ? 'border-[#1A1A1A] bg-[#1A1A1A] text-white shadow-lg' : 'border-[#F1F1F1] bg-white'}`}
                 >
-                  <span className={`text-[11px] font-black uppercase tracking-widest mb-1 ${isPicked ? 'text-white' : 'text-[#1A1A1A]'}`}>{type.label}</span>
-                  <span className={`text-[9px] leading-tight font-medium ${isPicked ? 'text-gray-400' : 'text-gray-500'}`}>{type.desc}</span>
+                  <div>
+                    <span className={`text-[10px] font-black uppercase tracking-widest block ${isPicked ? 'text-white' : 'text-[#1A1A1A]'}`}>{type.label}</span>
+                    <span className={`text-[8px] font-medium ${isPicked ? 'text-white/60' : 'text-gray-400'}`}>{type.desc}</span>
+                  </div>
+                  {isPicked && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                 </button>
               );
             })}
@@ -231,10 +242,9 @@ function SkinModal({ isOpen, onConfirm }) {
           <button 
             disabled={!selected} 
             onClick={() => onConfirm(selected)}
-            className={`w-full h-14 rounded-xl font-black text-[11px] uppercase tracking-[0.3em] transition-all duration-500 flex items-center justify-center gap-3 ${selected ? 'bg-[#1A1A1A] text-white shadow-lg hover:bg-[#8B7E74]' : 'bg-gray-100 text-gray-300 cursor-not-allowed'}`}
+            className={`w-full h-12 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all duration-500 ${selected ? 'bg-[#1A1A1A] text-white shadow-lg' : 'bg-gray-100 text-gray-300'}`}
           >
-            Confirm Selection
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            Confirm & Proceed
           </button>
         </div>
       </div>
