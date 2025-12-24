@@ -6,16 +6,27 @@ const BookingContext = createContext();
 export function BookingProvider({ children }) {
   const [bookingData, setBookingData] = useState({
     service: null,
+    offer: null,     // ✅ ADD
     skinType: null,
     date: null,
     slot: null
   });
 
   const setService = (service) => {
-    setBookingData(prev => ({ 
-      ...prev, 
-      service, 
-      skinType: null // Reset skin if service changes
+    setBookingData(prev => ({
+      ...prev,
+      service,
+      offer: null,        // ✅ service select = offer reset
+      skinType: null
+    }));
+  };
+
+  const setOffer = (offer) => {
+    setBookingData(prev => ({
+      ...prev,
+      offer,
+      service: null,      // ✅ offer select = service reset
+      skinType: null
     }));
   };
 
@@ -28,7 +39,9 @@ export function BookingProvider({ children }) {
   };
 
   return (
-    <BookingContext.Provider value={{ bookingData, setService, setSkinType, setSchedule }}>
+    <BookingContext.Provider
+      value={{ bookingData, setService, setOffer, setSkinType, setSchedule }}
+    >
       {children}
     </BookingContext.Provider>
   );

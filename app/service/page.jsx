@@ -8,7 +8,8 @@ import { useBooking } from '../context/BookingContext';
 
 export default function ServicePage() {
   const router = useRouter();
-  const { bookingData, setService, setSkinType } = useBooking();
+  const { bookingData, setService, setOffer, setSkinType } = useBooking();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -25,9 +26,8 @@ export default function ServicePage() {
     return () => window.removeEventListener('scroll', controlNavbar);
   }, [lastScrollY]);
 
-  // Filter only active services from your new config
   const activeServices = SERVICES.filter((s) => s.active);
-  const activeOffer = getActiveOffer(); // Fetch the offer
+  const activeOffer = getActiveOffer();
 
   const steps = [
     { name: 'Service', path: '/service' },
@@ -71,77 +71,72 @@ export default function ServicePage() {
 
         {/* SERVICE GRID SECTION */}
         <section className="max-w-6xl mx-auto px-5 pb-48">
-          
-          {/* 🚀 PREMIUM OFFER (Added here without changing anything else) */}
           {activeOffer && (
             <div 
-              onClick={() => setService(activeOffer)}
+              onClick={() => setOffer(activeOffer)}
               className={`mb-16 relative overflow-hidden rounded-[28px] transition-all duration-500 cursor-pointer active:scale-[0.98]
-              ${bookingData.service?.id === activeOffer.id ? 'bg-[#8B7E74] shadow-2xl translate-y-[-4px]' : 'bg-[#1A1A1A] shadow-lg'}`}
+              ${bookingData.offer?.id === activeOffer.id ? 'bg-[#8B7E74] shadow-2xl translate-y-[-4px]' : 'bg-[#1A1A1A] shadow-lg'}`}
             >
               <div className="p-7 md:p-10 relative overflow-hidden">
-                {/* Selection Tick */}
-                {bookingData.service?.id === activeOffer.id && (
+                {bookingData.offer?.id === activeOffer.id && (
                   <div className="absolute top-5 right-5 w-7 h-7 bg-white rounded-full flex items-center justify-center animate-in zoom-in duration-300 shadow-xl z-20">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B7E74" strokeWidth="4"><polyline points="20 6 9 17 4 12"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8B7E74" strokeWidth="4">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
                   </div>
                 )}
                 <div className="relative z-10">
                   <div className={`inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full border text-[8px] font-black uppercase tracking-widest mb-4 transition-all
-                    ${bookingData.service?.id === activeOffer.id ? 'bg-white/20 border-white/30 text-white' : 'bg-[#8B7E74]/10 border-[#8B7E74]/30 text-[#8B7E74]'}`}>
-                    <span className={`w-1 h-1 rounded-full ${bookingData.service?.id === activeOffer.id ? 'bg-white' : 'bg-[#8B7E74] animate-pulse'}`} />
+                    ${bookingData.offer?.id === activeOffer.id ? 'bg-white/20 border-white/30 text-white' : 'bg-[#8B7E74]/10 border-[#8B7E74]/30 text-[#8B7E74]'}`}>
+                    <span className={`w-1 h-1 rounded-full ${bookingData.offer?.id === activeOffer.id ? 'bg-white' : 'bg-[#8B7E74] animate-pulse'}`} />
                     {activeOffer.tag}
                   </div>
-                  <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter mb-2 leading-none">{activeOffer.title}</h2>
+                  <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tighter mb-2 leading-none">
+                    {activeOffer.title}
+                  </h2>
                   <div className="flex flex-wrap gap-x-3 gap-y-1 mb-6">
                     {activeOffer.servicesIncluded.map((s, i) => (
-                      <span key={i} className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 ${bookingData.service?.id === activeOffer.id ? 'text-white/80' : 'text-white/40'}`}>
+                      <span key={i} className={`text-[10px] font-bold uppercase tracking-wider flex items-center gap-2 ${bookingData.offer?.id === activeOffer.id ? 'text-white/80' : 'text-white/40'}`}>
                         {s} {i !== activeOffer.servicesIncluded.length - 1 && <span className="opacity-30">•</span>}
                       </span>
                     ))}
                   </div>
                   <div className="flex items-baseline gap-2 pt-4 border-t border-white/10">
                     <span className="text-4xl md:text-6xl font-bold text-white tracking-tighter leading-none">{activeOffer.priceHint}</span>
-                    <span className={`text-[9px] font-medium uppercase tracking-[0.2em] italic ${bookingData.service?.id === activeOffer.id ? 'text-white/60' : 'text-white/20'}`}>{activeOffer.note}</span>
+                    <span className={`text-[9px] font-medium uppercase tracking-[0.2em] italic ${bookingData.offer?.id === activeOffer.id ? 'text-white/60' : 'text-white/20'}`}>{activeOffer.note}</span>
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* ORIGINAL GRID ITEMS */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-14">
             {activeServices.map((service) => {
               const isSelected = bookingData.service?.id === service.id;
               const tagText = getSkinBasedTag(service, bookingData.skinType);
-
               return (
                 <div key={service.id} onClick={() => setService(service)} className="group cursor-pointer">
                   <div className={`relative aspect-[16/10] overflow-hidden rounded-[24px] transition-all duration-700 ${isSelected ? 'ring-2 ring-[#1A1A1A] ring-offset-4' : ''}`}>
-                    
-                    {/* PSYCHOLOGY TAG BADGE */}
                     <div className="absolute top-4 left-4 z-20">
                       <span className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm backdrop-blur-md border border-white/20 transition-all duration-500
                         ${service.isRecommended ? 'bg-[#8B7E74] text-white' : 'bg-white/90 text-[#1A1A1A]'}`}>
                         {tagText}
                       </span>
                     </div>
-
                     <img src={service.image} alt={service.name} className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" />
-                    
                     <div className="absolute top-4 right-4 backdrop-blur-xl bg-white/95 px-4 py-2 rounded-full shadow-md border border-white/20">
                       <span className="text-[14px] font-bold tracking-tight text-[#1A1A1A]">{service.priceHint}</span>
                     </div>
-
                     {isSelected && (
                       <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] flex items-center justify-center animate-in fade-in duration-500">
-                         <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center shadow-2xl">
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center shadow-2xl">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3">
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
                         </div>
                       </div>
                     )}
                   </div>
-
                   <div className="mt-6 px-1 text-left">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-[9px] font-bold uppercase tracking-widest text-[#8B7E74]">{service.category}</span>
@@ -159,32 +154,29 @@ export default function ServicePage() {
         </section>
       </div>
 
-      {/* FLOATING FOOTER */}
+      {/* FOOTER - WITH UPDATED HINT TEXT */}
       <footer className={`fixed bottom-0 left-0 w-full px-6 pb-8 md:pb-12 z-50 pointer-events-none transition-all duration-700 transform 
-          ${bookingData.service ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}
-      >
+        ${bookingData.service || bookingData.offer ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
         <div className="max-w-2xl mx-auto pointer-events-auto">
           <button
             onClick={() => (bookingData.service?.needsSkinType && !bookingData.skinType) ? setIsModalOpen(true) : router.push('/time')}
-            className="w-full bg-[#1A1A1A] text-white py-5 px-6 flex flex-col items-center justify-center gap-1 group relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] active:scale-[0.98] overflow-hidden transition-all duration-300 rounded-[24px] md:rounded-[32px]"
+            className="w-full bg-[#1A1A1A] text-white py-5 px-6 flex flex-col items-center justify-center group relative shadow-[0_20px_50px_rgba(0,0,0,0.3)] active:scale-[0.98] overflow-hidden transition-all duration-300 rounded-[24px] md:rounded-[32px]"
           >
             <div className="absolute inset-0 bg-[#8B7E74] translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
             
-            <div className="flex items-center gap-3 z-10 relative">
-              <span className="text-[12px] font-black uppercase tracking-[0.4em]">Choose Time Window</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="transition-transform group-hover:translate-x-1">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
+            <div className="flex flex-col items-center z-10 relative">
+              <span className="text-[12px] font-black uppercase tracking-[0.4em] mb-0.5">
+                Choose Time Window
+              </span>
+              {/* ✨ ADDED HINT TEXT BELOW */}
+              <span className="text-[9px] font-medium text-white/60 tracking-wider">
+                You can adjust services later on WhatsApp
+              </span>
             </div>
-
-            <p className="text-[9px] font-medium text-white/40 group-hover:text-white/70 z-10 relative uppercase tracking-widest transition-colors">
-              You can change service later on WhatsApp
-            </p>
           </button>
         </div>
       </footer>
 
-      {/* SKIN ANALYSIS MODAL */}
       <SkinModal 
         isOpen={isModalOpen} 
         onConfirm={(skin) => { 
@@ -197,6 +189,7 @@ export default function ServicePage() {
   );
 }
 
+// SkinModal code remains exactly the same as provided
 function SkinModal({ isOpen, onConfirm }) {
   const [selected, setSelected] = useState(null);
   if (!isOpen) return null;
