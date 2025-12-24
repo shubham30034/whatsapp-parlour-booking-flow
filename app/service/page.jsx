@@ -60,7 +60,7 @@ export default function ServicePage() {
       </div>
 
       <div className={`flex-1 transition-all duration-1000 transform ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-        {/* HEADER - UPDATED TEXT */}
+        {/* HEADER */}
         <header className="max-w-6xl mx-auto px-6 pt-16 pb-10">
           <p className="text-[9px] font-black uppercase tracking-[0.4em] text-[#8B7E74] mb-2">Step 01 / 03</p>
           <h1 className="text-[34px] md:text-[56px] font-bold tracking-tighter leading-[1.1] mb-3">
@@ -83,29 +83,34 @@ export default function ServicePage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                   
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-2 mb-2">
                       <span className="bg-white/10 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border border-white/10">
-                        {activeOffer.tag}
+                        {activeOffer.offerName || "Limited Offer"}
                       </span>
-                      <span className="text-[#FDFCFB]/60 text-[8px] font-bold uppercase tracking-widest italic">Best Value</span>
+                      <span className="text-[#FDFCFB]/60 text-[8px] font-bold uppercase tracking-widest italic">New Year SPECIAL</span>
                     </div>
                     
-                    <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tighter mb-4 leading-none">
+                    <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tighter leading-none mb-1">
                       {activeOffer.title}
                     </h2>
+                    
+                    {/* Validity Text */}
+                    <p className="text-[9px] font-bold text-white/40 uppercase tracking-[0.1em] mb-4">
+                      Valid Until: {activeOffer.validUntil || "Limited Time"}
+                    </p>
 
-                    {/* Value Points */}
+                    {/* Services Included Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {activeOffer.servicesIncluded?.map((serviceName, index) => (
+                        <div key={index} className="flex items-center gap-2 text-white/90">
+                          <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                          <span className="text-[10px] font-bold uppercase tracking-tight leading-none">
+                            {serviceName}
+                          </span>
+                        </div>
+                      ))}
                       <div className="flex items-center gap-2 text-white/90">
-                        <div className="w-1 h-1 rounded-full bg-white/40" />
-                        <span className="text-[10px] font-bold uppercase tracking-tight leading-none">Full Cleanup Incl.</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-white/90">
-                        <div className="w-1 h-1 rounded-full bg-white/40" />
-                        <span className="text-[10px] font-bold uppercase tracking-tight leading-none">Instant Glow Boost</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-white/90">
-                        <div className="w-1 h-1 rounded-full bg-white/40" />
+                        <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
                         <span className="text-[10px] font-bold uppercase tracking-tight leading-none text-[#FDFCFB]">Save upto ₹300</span>
                       </div>
                     </div>
@@ -205,7 +210,6 @@ export default function ServicePage() {
   );
 }
 
-// SkinModal code remains identical to previous refined version
 function SkinModal({ isOpen, onConfirm }) {
   const [selected, setSelected] = useState(null);
   if (!isOpen) return null;

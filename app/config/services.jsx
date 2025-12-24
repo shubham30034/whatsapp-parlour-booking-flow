@@ -135,7 +135,7 @@ export const OFFERS = {
 
   special: {
     id: "new_year_luxe_combo",
-    enabled: false, // 👉 New Year pe true karna
+    enabled: true, // 👉 New Year pe true karna
 
     type: "combo",
 
